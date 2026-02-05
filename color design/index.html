@@ -3,65 +3,159 @@
 <head>
     <title>My Favorite Vehicles</title>
 </head>
-<body style="background-color: silver;">
+ <style>
+        /* Element Selectors */
+        body {
+            background-color: #09a303;
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            color: #145700;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #074e00;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+        
+        p{
+              color: #15ff00;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+        ul{
+ color: #6eff61;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
 
-    <h1 style="color:#4c28da">My Top Three Favorite Vehicular Machinery</h1>
-    <p style="color: #3d40f1; font-size: 30px; ">These Are The Three Cars/Motorcycles I Want Before I'm 21.</p>
+        ol{
+ color: #27ff13;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+        
+        /* Class Selectors */
+        .highlight {
+            background-color: #FFEAA7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .list-container {
+            background-color: #DFE6E9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        /* ID Selector */
+        #color-explanation {
+            background-color: #C4CBCA;
+            padding: 15px;
+            border: 2px dashed #606061;
+            color: #0A0F0D;
+        }
+        
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background-color: #1a690f;
+            color: rgb(255, 255, 255);
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #F2F2F2;
+        }
+        
+        tr:hover {
+            background-color: #FFEAA7;
+        }
+        
+        /* Image Styling */
+        img {
+            border: 3px solid #EE4266;
+            border-radius: 5px;
+            margin: 10px;
+            width: 200px;
+            height: 200px;
+        }
+
+    </style>
+<body>
+
+    <h1>My Top Three Favorite Vehicular Machinery</h1>
+    <p>These Are The Three Cars/Motorcycles I Want Before I'm 21.</p>
     
     <hr>
     
-    <h2 style="color:#8b4ed1">Top 3</h2>
-    <ol style="color: #00000091; font-size: 25px;">
-        <li style="margin-left:auto">Nissan 350z coupe LS V8 </li>
+    <h2>Top 3</h2>
+    <ol>
+        <li>Nissan 350z coupe LS V8 </li>
         <li>Bmw S 1000 RR</li>
         <li>Toyota MK3 Supra</li>
     </ol>
     
-    <h2 style="color:#1F1F36">Why I Love These Cars</h2>
-    <ul style="color: #0A0F0D; font-size: 16px;">
+    <h2>Why I Love These Cars</h2>
+    <ul>
         <li>Amazing Speed and Acceleration</li>
         <li>Good Looks</li>
         <li>Reliable</li>
         <li>Perfect Comfort</li>
     </ul>
     <h2>Color Scheme and Why </h2>
-    <p>I chose this</p>
+    <p>I chose this color scheme because it looks extravagent and it fits the color o fthe cars that are in the images and the style of them.</p>
     <hr>
     
-    <h2 style="color:#1F1F36">Car Details</h2>
-    <table style="width: 100%; color: #0A0F0D;">
-        <tr style="background-color: #C4CBCA;">
+    <h2>Car Details</h2>
+    <table>
+        <tr>
             <th>Car and Color</th>
             <th>Year</th>
             <th>Horsepower/CC's</th>
             <th>Cost</th>
         </tr>
         <tr>
-            <td style="margin-left: 50%; background-color: #0F1020; color:#3d40f1; font-weight: 1000; border-style:inset; border-color:#8b4ed1 ">Nissan 350z coupe: black</td>
-            <td style="background-color: #0F1020; color:#3d40f1; font-weight: 1000; border-style:inset ; border-color:#8b4ed1 ">2008</td>
-            <td style="background-color: #0F1020; color:#3d40f1; font-weight: 1000; border-style:inset ; border-color:#8b4ed1 ">1,000+ Horsepower</td>
-            <td style="background-color: #0F1020; color:#3d40f1; font-weight: 1000; border-style:inset ; border-color:#8b4ed1 ">5,000$-20,000$</td>
+            <td>Nissan 350z coupe: black</td>
+            <td>2008</td>
+            <td>1,000+ Horsepower</td>
+            <td>5,000$-20,000$</td>
         </tr>
         <tr>
-            <td style="background-color: #745296; color:#632A50; font-weight: 1000; border-style:outset ; border-color:#3d40f1 ">BMW S1000 RR: Black and Red</td>
-            <td style="background-color: #745296; color:#632A50; font-weight: 1000; border-style:outset ; border-color:#3d40f1 ">2009</td>
-            <td style="background-color: #745296; color:#632A50; font-weight: 1000; border-style:outset ; border-color:#3d40f1 ">999cc</td>
-            <td style="background-color: #745296; color:#632A50; font-weight: 1000; border-style:outset ; border-color:#3d40f1 ">13,800$</td>
+            <td>BMW S1000 RR: Black and Red</td>
+            <td>2009</td>
+            <td>999cc</td>
+            <td>13,800$</td>
         </tr>
         <tr>
-            <td style="background-color: #05138f; color:#1a8a2d; font-weight: 1000; border-style:inset ; border-color:#00aeff ">Toyota MK3: Red</td>
-            <td style="background-color: #05138f; color:#1a8a2d; font-weight: 1000; border-style:inset ; border-color:#00aeff ">1989</td>
-            <td style="background-color: #05138f; color:#1a8a2d; font-weight: 1000; border-style:inset ; border-color:#00aeff ">450 Horsepower</td>
-            <td style="background-color: #05138f; color:#1a8a2d; font-weight: 1000; border-style:inset ; border-color:#00aeff ">15,000$-20,000$</td>
+            <td>Toyota MK3: Red</td>
+            <td>1989</td>
+            <td>450 Horsepower</td>
+            <td>15,000$-20,000$</td>
         </tr>
     </table>
     
     <br>
 </body>
 <hr>
-<body style="background-color: #1a8a2d;" >
-    <img style="border-style:outset;   "src="images/350z.jpg" height="250" width="340">
-    <img style="margin-left: 19%; border-style:outset" src="images/S1000RR.jpg" height="250" width="320">
-    <img style="margin-left: 20%; border-style:outset" src="images/mk3.jpg" Width="390" Height="250">
+<body>
+    <img src="images/350z.jpg" >
+    <img src="images/S1000RR.jpg">
+    <img src="images/mk3.jpg" >
 </body>
 </html>

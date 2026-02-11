@@ -1,0 +1,97 @@
+body {
+            background-color: #7a0202;
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            color: #ffffff;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #ffffff;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        li {
+            color: #ffffff;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        
+        p{
+              color: #ffffff;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        ul{
+            color: #e74cc0;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+
+        a{
+            font-size: 30px;
+            margin-left:580px ;
+            color:rgb(255, 255, 255) ;
+
+        }
+        
+        /* Class Selectors */
+        .highlight {
+            background-color: #FFEAA7;
+            padding: 10px; 
+            border-radius: 5px;
+        }
+        
+        .list-container {
+            background-color: #DFE6E9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        /* ID Selector */
+        #color-explanation {
+            background-color: #C4CBCA;
+            padding: 15px;
+            border: 2px dashed #606061;
+            color: #0A0F0D;
+        }
+        
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            
+            background-color: #1a690f;
+            color: rgb(255, 255, 255);
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #F2F2F2;
+        }
+        
+        tr:hover {
+            background-color: #FFEAA7;
+        }
+        
+        /* Image Styling */
+        img {
+            border: 3px solid #ffffff;
+            border-radius: 5px;
+            margin-left: 10%;
+            width: 350px;
+        }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Pet Cafe Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🐾 Pet Cafe Simulator</h1>
+            <div class="header-stats">
+                <div class="stat">💰 Cash: $<span id="money">0</span></div>
+                <div class="stat">⭐ Happiness: <span id="happiness">50</span>%</div>
+                <div class="stat">📈 Level: <span id="level">1</span></div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Cafe Area -->
+            <section class="cafe-section">
+                <h2>Your Pet Cafe ☕</h2>
+                <div class="cafe-controls">
+                    <button class="btn btn-secondary" id="multiSelectBtn" onclick="game.toggleMultiSelect()">📋 Multiselect</button>
+                    <button class="btn btn-danger" id="deleteBtn" onclick="game.deleteSelectedPets()" style="display: none;">🗑️ Delete Selected</button>
+                    <span id="selectionCount" style="display: none; margin-left: 10px; font-weight: bold;">0 selected</span>
+                </div>
+                <div class="cafe-container">
+                    <div class="pets-area" id="petsArea">
+                        <!-- Pets will be added here -->
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="game.petArrives()">🐕 Attract Pet</button>
+                        <button class="btn btn-success" onclick="game.serveDrink()">☕ Serve Drink (+$30)</button>
+                        <button class="btn btn-info" onclick="game.giveSnack()">🍪 Give Snack (+20 Happy)</button>
+                        <button class="btn btn-warning" onclick="game.playGame()">🎮 Play Game (+50 Happy)</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Store -->
+            <section class="store-section">
+                <h2>🏪 Upgrade Store</h2>
+                <div class="store-grid" id="storeGrid">
+                    <!-- Store items will be added here -->
+                </div>
+            </section>
+
+            <!-- Cafe Decorations -->
+            <section class="decor-section">
+                <h2>✨ Decorations</h2>
+                <div class="decor-grid" id="decorGrid">
+                    <!-- Decorations will be added here -->
+                </div>
+            </section>
+
+            <!-- Unlockable Pets -->
+            <section class="pets-shop-section">
+                <h2>🐾 Unlock New Pets</h2>
+                <div class="pets-shop-grid" id="petsShopGrid">
+                    <!-- Pet unlock items will be added here -->
+                </div>
+            </section>
+
+            <!-- Statistics -->
+            <section class="stats-section">
+                <h2>📊 Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h3>🐕 Total Pets</h3>
+                        <p><span id="totalPets">0</span></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>☕ Drinks Served</h3>
+                        <p><span id="drinksServed">0</span></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>💵 Total Earned</h3>
+                        <p>$<span id="totalEarned">0</span></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>⏰ Play Time</h3>
+                        <p><span id="playTime">0</span>s</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <button class="btn btn-dark" onclick="game.saveGame()">💾 Save Game</button>
+            <button class="btn btn-dark" onclick="game.resetGame()">🔄 Reset</button>
+            <p>Pet Cafe Simulator v1.0 - Made with ❤️</p>
+        </footer>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>

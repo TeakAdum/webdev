@@ -67,6 +67,12 @@ section h2 {
     padding-bottom: 10px;
 }
 
+.rebirth-section {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    padding: 30px;
+    border-radius: 15px;
+}
+
 /* Cafe Section */
 .cafe-section {
     background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);

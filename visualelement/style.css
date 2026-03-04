@@ -1,0 +1,43 @@
+body {
+            background-color: #083041;
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            color: #5f8df0;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #ffffff;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        li {
+            color: #ffffff;
+            padding-bottom: 5px;
+            text-align: left;
+        }
+        
+        video{
+           width:11%;
+        }
+        audio{
+            width:50%;
+            margin-left:25%;
+        }
+        iframe {
+            border: 3px solid #444a50;
+            height:30%;
+            border-radius: 5px;
+            margin-left:25%;
+            width: 50%;
+        }
+        
+    
+        img {
+            border: 3px solid #444a50;
+            border-radius: 5px;
+            margin-left:35%;
+            width: 20%;
+        }

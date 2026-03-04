@@ -1,0 +1,26 @@
+        body {
+            background-color: #7274e2;
+            font-family: Arial, sans-serif;
+        }
+ 
+        .profile-card {
+            color: #ffffff;
+            padding-bottom: 5px;
+            text-align: center;
+            border:10px;
+        }
+       h2{
+        font-size:35px;
+        font-style:Bold;
+       }
+       p{
+        font-size: 30px;
+        padding:20px;
+
+       }
+       img{
+        border:5px;
+        border-color:magenta;
+        
+        
+       }

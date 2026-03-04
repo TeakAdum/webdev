@@ -11,6 +11,10 @@ const game = {
         experience: 0,
         experienceToLevel: 100,
         
+        // Rebirth System
+        rebirths: 0,
+        rebirthPoints: 0,
+        
         // Statistics
         totalPets: 0,
         drinksServed: 0,
@@ -21,14 +25,23 @@ const game = {
         pets: [],
         unlockedPetEmojis: ['🐕', '🐈', '🐇'],
         
-        // Upgrades - Much harder to get
+        // Upgrades - Gameplay Benefits
         upgrades: {
-            fastService: { count: 0, cost: 2000, multiplier: 1.15 },
-            prettyDecor: { count: 0, cost: 1800, multiplier: 1.1 },
-            speedBoost: { count: 0, cost: 3000, multiplier: 1.2 },
-            musicSystem: { count: 0, cost: 2500, multiplier: 1.12 },
-            VIPLounge: { count: 0, cost: 6000, multiplier: 1.25 },
-            FoodDelivery: { count: 0, cost: 4500, multiplier: 1.18 },
+            cooldownReduction1: { count: 0, cost: 2000, effect: 'Reduce pet cooldown by 1s' },
+            cooldownReduction2: { count: 0, cost: 4000, effect: 'Reduce pet cooldown by 2s more' },
+            incomeBoost: { count: 0, cost: 3000, effect: '+20% pet income' },
+            happinessBoost: { count: 0, cost: 2500, effect: '+50% happiness from actions' },
+            moneyBoost: { count: 0, cost: 3500, effect: '+25% money from drinks' },
+            petPriceDown: { count: 0, cost: 5000, effect: '-15% pet cost' },
+        },
+        
+        // Rebirth Upgrades - Permanent bonuses
+        rebirthUpgrades: {
+            moneyMultiplier: { level: 0, cost: 10, effect: '+5% money per level' },
+            incomeMultiplier: { level: 0, cost: 15, effect: '+5% pet income per level' },
+            startingMoney: { level: 0, cost: 8, effect: '+$100 starting money per level' },
+            unlockAllPets: { level: 0, cost: 50, effect: 'Unlock all rare pets' },
+            petStartingHappiness: { level: 0, cost: 12, effect: '+5 pet starting happiness per level' },
         },
         
         // Decorations
@@ -58,17 +71,32 @@ const game = {
 
     init() {
         this.loadGame();
+        this.applyRebirthBonuses();
         this.render();
         this.startAutoTick();
         console.log('🎮 Pet Cafe Simulator loaded!');
+    },
+    
+    getEffectiveCooldown() {
+        let cooldown = 10000; // Base 10 seconds
+        cooldown -= this.state.upgrades.cooldownReduction1.count * 1000; // 1s per level
+        cooldown -= this.state.upgrades.cooldownReduction2.count * 2000; // 2s per level
+        return Math.max(1000, cooldown); // Minimum 1 second
+    },
+    
+    applyRebirthBonuses() {
+        // Apply permanent bonuses from rebirth upgrades
+        // These will be applied to calculations as needed
     },
 
     petArrives() {
         const now = Date.now();
         
+        const effectiveCooldown = this.getEffectiveCooldown();
+        
         // Check cooldown
-        if (now - this.lastPetTime < this.petCooldown) {
-            const remainingTime = Math.ceil((this.petCooldown - (now - this.lastPetTime)) / 1000);
+        if (now - this.lastPetTime < effectiveCooldown) {
+            const remainingTime = Math.ceil((effectiveCooldown - (now - this.lastPetTime)) / 1000);
             this.showNotification(`⏱️ Wait ${remainingTime}s to add another pet!`, 'error');
             return;
         }
@@ -76,14 +104,21 @@ const game = {
         this.lastPetTime = now;
         
         const randomEmoji = this.getRandomPet();
-        const baseCost = 300;
+        let baseCost = 300;
+        
+        // Apply pet price reduction upgrade
+        const priceMultiplier = Math.pow(0.85, this.state.upgrades.petPriceDown.count); // -15% per level
+        baseCost = Math.floor(baseCost * priceMultiplier);
+        
         const petCount = this.state.pets.length;
         // Exponential cost scaling: each pet costs 1.6x more than the last
         const petCost = Math.floor(baseCost * Math.pow(1.6, petCount));
         
+        let startingHappiness = 50 + (this.state.rebirthUpgrades.petStartingHappiness.level * 5);
+        
         this.state.pets.push({
             emoji: randomEmoji,
-            happiness: 50,
+            happiness: startingHappiness,
             arrivedAt: Date.now(),
             cost: petCost,
             incomePerSecond: petCost * 0.05, // 5% of cost per second
@@ -92,7 +127,8 @@ const game = {
         
         this.addMoney(10);
         this.state.totalPets++;
-        this.showNotification(`🐕 Pet arrived! (Cost: $${petCost}, Income: $${(petCost * 0.05).toFixed(2)}/s)`, 'success');
+        const incomePerSec = petCost * 0.05;
+        this.showNotification(`🐕 Pet arrived! (Cost: $${petCost}, Income: $${(incomePerSec).toFixed(2)}/s)`, 'success');
         this.render();
     },
 
@@ -104,9 +140,9 @@ const game = {
 
         let earnings = 30;
         
-        // Apply upgrade multiplier
-        const fastServiceBonus = Math.pow(1.15, this.state.upgrades.fastService.count);
-        earnings = Math.floor(earnings * fastServiceBonus);
+        // Apply money boost upgrade multiplier
+        const moneyBoost = 1 + (this.state.upgrades.moneyBoost.count * 0.25);
+        earnings = Math.floor(earnings * moneyBoost);
         
         this.addMoney(earnings);
         this.state.drinksServed++;
@@ -189,7 +225,102 @@ const game = {
 
         this.state.money -= cost;
         upgrade.count++;
-        this.showNotification(`✨ ${upgradeName} upgraded!`, 'success');
+        this.showNotification(`✨ ${upgrade.effect}`, 'success');
+        this.render();
+    },
+    
+    buyRebirthUpgrade(upgradeName) {
+        const upgrade = this.state.rebirthUpgrades[upgradeName];
+        if (!upgrade) return;
+        
+        const cost = upgrade.cost;
+        
+        if (this.state.rebirthPoints < cost) {
+            this.showNotification('Not enough rebirth points!', 'error');
+            return;
+        }
+        
+        this.state.rebirthPoints -= cost;
+        upgrade.level++;
+        this.showNotification(`🔄 ${upgrade.effect}`, 'success');
+        this.render();
+    },
+    
+    rebirth() {
+        if (this.state.pets.length === 0) {
+            this.showNotification('No pets yet!', 'error');
+            return;
+        }
+        
+        if (!confirm(`🔄 Rebirth? You'll get ${this.state.pets.length} rebirth points. Progress will reset!`)) {
+            return;
+        }
+        
+        // Calculate rebirth points based on pets (1 point per pet)
+        const rebirthPointsGained = this.state.pets.length;
+        
+        // Keep rebirth points and reset everything else
+        this.state.rebirthPoints += rebirthPointsGained;
+        this.state.rebirths++;
+        
+        // Calculate bonuses from rebirth upgrades
+        const moneyBonus = this.state.rebirthUpgrades.moneyMultiplier.level * 0.05;
+        const incomeBonus = this.state.rebirthUpgrades.incomeMultiplier.level * 0.05;
+        const startingMoneyBonus = this.state.rebirthUpgrades.startingMoney.level * 100;
+        
+        // Reset game state but keep rebirth upgrades and unlocks
+        const oldPetUnlocks = JSON.parse(JSON.stringify(this.state.petUnlocks));
+        const oldRebirthUpgrades = JSON.parse(JSON.stringify(this.state.rebirthUpgrades));
+        const oldRebirthPoints = this.state.rebirthPoints;
+        const oldRebirths = this.state.rebirths;
+        
+        // Check if should unlock all pets
+        if (this.state.rebirthUpgrades.unlockAllPets.level > 0) {
+            Object.keys(oldPetUnlocks).forEach(key => {
+                oldPetUnlocks[key].unlocked = true;
+            });
+        }
+        
+        // Reset to initial state
+        this.state = {
+            money: 200 + startingMoneyBonus,
+            happiness: 50,
+            level: 1,
+            experience: 0,
+            experienceToLevel: 100,
+            rebirths: oldRebirths,
+            rebirthPoints: oldRebirthPoints,
+            totalPets: 0,
+            drinksServed: 0,
+            totalEarned: 200 + startingMoneyBonus,
+            playTime: 0,
+            pets: [],
+            unlockedPetEmojis: ['🐕', '🐈', '🐇'],
+            upgrades: {
+                cooldownReduction1: { count: 0, cost: 2000, effect: 'Reduce pet cooldown by 1s' },
+                cooldownReduction2: { count: 0, cost: 4000, effect: 'Reduce pet cooldown by 2s more' },
+                incomeBoost: { count: 0, cost: 3000, effect: '+20% pet income' },
+                happinessBoost: { count: 0, cost: 2500, effect: '+50% happiness from actions' },
+                moneyBoost: { count: 0, cost: 3500, effect: '+25% money from drinks' },
+                petPriceDown: { count: 0, cost: 5000, effect: '-15% pet cost' },
+            },
+            rebirthUpgrades: oldRebirthUpgrades,
+            decorations: {
+                lights: { count: 0, cost: 100, happiness: 5 },
+                plants: { count: 0, cost: 150, happiness: 8 },
+                furniture: { count: 0, cost: 200, happiness: 10 },
+                paintings: { count: 0, cost: 250, happiness: 12 },
+                fountain: { count: 0, cost: 500, happiness: 25 },
+                chandelier: { count: 0, cost: 800, happiness: 35 },
+            },
+            petUnlocks: oldPetUnlocks,
+        };
+        
+        this.lastPetTime = 0;
+        this.selectedPets.clear();
+        this.multiSelectMode = false;
+        
+        this.showNotification(`🔄 Rebirthed! Gained ${rebirthPointsGained} rebirth points!`, 'success');
         this.render();
     },
 
@@ -330,13 +461,15 @@ const game = {
         document.getElementById('money').textContent = this.state.money;
         document.getElementById('happiness').textContent = this.state.happiness;
         document.getElementById('level').textContent = this.state.level;
+        document.getElementById('rebirths').textContent = this.state.rebirths;
+        document.getElementById('rebirthPoints').textContent = this.state.rebirthPoints;
         
         // Update pet button cooldown
         const petBtn = document.querySelector('button[onclick="game.petArrives()"]');
         if (petBtn) {
             const now = Date.now();
             const timeSinceLast = now - this.lastPetTime;
-            const remainingCooldown = Math.max(0, this.petCooldown - timeSinceLast);
+            const remainingCooldown = Math.max(0, this.getEffectiveCooldown() - timeSinceLast);
             
             if (remainingCooldown > 0) {
                 const seconds = Math.ceil(remainingCooldown / 1000);
@@ -355,6 +488,9 @@ const game = {
 
         // Render store
         this.renderStore();
+        
+        // Render rebirth section
+        this.renderRebirthSection();
 
         // Render decorations
         this.renderDecorations();
@@ -413,14 +549,14 @@ const game = {
         storeGrid.innerHTML = '';
 
         Object.entries(this.state.upgrades).forEach(([name, upgrade]) => {
-            const cost = Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+            const cost = Math.floor(upgrade.cost * Math.pow(1.25, upgrade.count));
             const canAfford = this.state.money >= cost;
             
             const item = document.createElement('div');
             item.className = `store-item ${canAfford ? 'affordable' : 'not-affordable'}`;
             item.innerHTML = `
                 <h3>${this.getUpgradeEmoji(name)}</h3>
-                <p>${name}</p>
+                <p>${upgrade.effect}</p>
                 <p class="price">$${cost}</p>
                 <span class="count">Lvl ${upgrade.count}</span>
                 <button class="buy-btn" onclick="game.buyUpgrade('${name}')" ${!canAfford ? 'disabled' : ''}>Buy</button>
@@ -449,6 +585,37 @@ const game = {
             decorGrid.appendChild(item);
         });
     },
+    
+    renderRebirthSection() {
+        const rebirthSection = document.getElementById('rebirthSection');
+        if (!rebirthSection) return;
+        
+        rebirthSection.innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h3>🔄 Rebirths: ${this.state.rebirths}</h3>
+                <h3>✨ Rebirth Points: ${this.state.rebirthPoints}</h3>
+                <button class="btn btn-primary" onclick="game.rebirth()" style="margin-top: 10px;">🔄 Rebirth Now</button>
+            </div>
+            <div id="rebirthUpgradesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px;"></div>
+        `;
+        
+        const upgradesGrid = document.getElementById('rebirthUpgradesGrid');
+        
+        Object.entries(this.state.rebirthUpgrades).forEach(([name, upgrade]) => {
+            const canAfford = this.state.rebirthPoints >= upgrade.cost;
+            
+            const item = document.createElement('div');
+            item.className = `store-item ${canAfford ? 'affordable' : 'not-affordable'}`;
+            item.innerHTML = `
+                <h3>✨</h3>
+                <p>${upgrade.effect}</p>
+                <p class="price">${upgrade.cost} pts</p>
+                <span class="count">Lvl ${upgrade.level}</span>
+                <button class="buy-btn" onclick="game.buyRebirthUpgrade('${name}')" ${!canAfford ? 'disabled' : ''}>Buy</button>
+            `;
+            upgradesGrid.appendChild(item);
+        });
+    },
 
     renderPetUnlocks() {
         const grid = document.getElementById('petsShopGrid');
@@ -474,12 +641,12 @@ const game = {
 
     getUpgradeEmoji(name) {
         const emojis = {
-            fastService: '⚡',
-            prettyDecor: '🎨',
-            speedBoost: '🚀',
-            musicSystem: '🎵',
-            VIPLounge: '👑',
-            FoodDelivery: '🚚'
+            cooldownReduction1: '⏱️',
+            cooldownReduction2: '⏱️',
+            incomeBoost: '💰',
+            happinessBoost: '😊',
+            moneyBoost: '💵',
+            petPriceDown: '🏷️'
         };
         return emojis[name] || '✨';
     },
@@ -503,7 +670,14 @@ const game = {
             
             // Auto-generate income from pets based on their cost
             if (this.state.pets.length > 0) {
-                const totalIncome = this.state.pets.reduce((sum, pet) => sum + pet.incomePerSecond, 0);
+                // Apply rebirth income bonus
+                const incomeBonus = 1 + (this.state.rebirthUpgrades.incomeMultiplier.level * 0.05);
+                // Apply income boost upgrade
+                const upgradeBonus = 1 + (this.state.upgrades.incomeBoost.count * 0.2);
+                
+                const totalIncome = this.state.pets.reduce((sum, pet) => {
+                    return sum + (pet.incomePerSecond * incomeBonus * upgradeBonus);
+                }, 0);
                 this.addMoney(Math.floor(totalIncome));
             }
             

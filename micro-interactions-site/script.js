@@ -1,13 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const colorBox = document.getElementById('colorBox');
-    let isOrange = true;
+    const brands = document.querySelectorAll('.brand');
 
-    colorBox.addEventListener('click', function() {
-        if (isOrange) {
-            colorBox.style.backgroundColor = '#9C27B0';
-        } else {
-            colorBox.style.backgroundColor = '#FF9800';
-        }
-        isOrange = !isOrange;
+    brands.forEach(brand => {
+        let isClicked = false;
+        brand.addEventListener('click', function() {
+            if (isClicked) {
+                brand.style.backgroundColor = 'white';
+            } else {
+                brand.style.backgroundColor = '#2196F3'; // blue
+            }
+            isClicked = !isClicked;
+        });
     });
 });
